@@ -41,6 +41,7 @@ export function BannerView({ bannerType, bannerState, onUpdateBanner }: BannerVi
       chosenItem: undefined,
       pullHistory: [],
       totalPulls: 0,
+      totalRadiance: 0,
     };
     onUpdateBanner(resetState);
     setResetModalOpen(false);
@@ -71,6 +72,11 @@ export function BannerView({ bannerType, bannerState, onUpdateBanner }: BannerVi
               style={{ width: `${(bannerState.pity5 / maxPity) * 100}%` }}
             />
           </div>
+          {bannerState.pity5 >= maxPity - 10 && (
+            <div className="text-xs text-yellow-700 mt-2">
+              Soft pity active!
+            </div>
+          )}
         </div>
 
         <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
@@ -84,6 +90,11 @@ export function BannerView({ bannerType, bannerState, onUpdateBanner }: BannerVi
               style={{ width: `${(bannerState.pity4 / 10) * 100}%` }}
             />
           </div>
+          {bannerState.pity4 >= 9 && (
+            <div className="text-xs text-purple-700 mt-2">
+              4-star guaranteed next!
+            </div>
+          )}
         </div>
 
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
@@ -93,6 +104,38 @@ export function BannerView({ bannerType, bannerState, onUpdateBanner }: BannerVi
           </div>
           <div className="text-sm text-blue-700 mt-2">
             Radiance used for pulls
+          </div>
+          <div className="text-xs text-blue-600 mt-1">
+            Avg: {bannerState.totalPulls > 0 ? (bannerState.totalRadiance / bannerState.totalPulls).toFixed(1) : '0'} per pull
+          </div>
+        </div>
+      </div>
+
+      {/* Statistics */}
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
+        <h4 className="font-semibold text-gray-800 mb-2">Statistics</h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div>
+            <span className="text-gray-600">Total Pulls:</span>
+            <div className="font-semibold text-gray-800">{bannerState.totalPulls}</div>
+          </div>
+          <div>
+            <span className="text-gray-600">5-Stars:</span>
+            <div className="font-semibold text-yellow-600">
+              {bannerState.pullHistory.filter(p => p.rarity === 5).length}
+            </div>
+          </div>
+          <div>
+            <span className="text-gray-600">4-Stars:</span>
+            <div className="font-semibold text-purple-600">
+              {bannerState.pullHistory.filter(p => p.rarity === 4).length}
+            </div>
+          </div>
+          <div>
+            <span className="text-gray-600">Guaranteed Pulls:</span>
+            <div className="font-semibold text-orange-600">
+              {bannerState.pullHistory.filter(p => p.isGuaranteed).length}
+            </div>
           </div>
         </div>
       </div>
