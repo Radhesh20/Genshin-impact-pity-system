@@ -14,24 +14,35 @@ export function PullInputModal({ isOpen, onClose, onSubmit, bannerType, pullCoun
   const [rarity, setRarity] = useState<3 | 4 | 5>(3);
   const [isFeatured, setIsFeatured] = useState(false);
   const [isChosenItem, setIsChosenItem] = useState(false);
+  const [isGuaranteed, setIsGuaranteed] = useState(false);
+  const [radianceUsed, setRadianceUsed] = useState<number>(0);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ rarity, isFeatured, isChosenItem }, pullCount);
+    onSubmit({ 
+      rarity, 
+      isFeatured, 
+      isChosenItem, 
+      isGuaranteed,
+      radianceUsed: radianceUsed > 0 ? radianceUsed : undefined 
+    }, pullCount);
     onClose();
     setRarity(3);
     setIsFeatured(false);
     setIsChosenItem(false);
+    setIsGuaranteed(false);
+    setRadianceUsed(0);
   };
 
   const showFeaturedOption = (rarity === 4 || rarity === 5) && bannerType !== 'standard';
   const showChosenOption = rarity === 5 && (bannerType === 'weapon' || bannerType === 'chronicled');
+  const showGuaranteedOption = rarity === 5;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-96 max-w-sm mx-4">
+      <div className="bg-white rounded-lg p-6 w-96 max-w-sm mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-800">
             Add {pullCount} Pull{pullCount > 1 ? 's' : ''}
@@ -45,6 +56,20 @@ export function PullInputModal({ isOpen, onClose, onSubmit, bannerType, pullCoun
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Radiance Used (optional):
+            </label>
+            <input
+              type="number"
+              min="0"
+              value={radianceUsed}
+              onChange={(e) => setRadianceUsed(Number(e.target.value))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter radiance amount"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Highest Rarity Obtained:
@@ -82,6 +107,22 @@ export function PullInputModal({ isOpen, onClose, onSubmit, bannerType, pullCoun
                 />
                 <span className="text-sm text-gray-700">
                   {rarity === 5 ? 'Was it a featured item?' : 'Was it a featured 4-star?'}
+                </span>
+              </label>
+            </div>
+          )}
+
+          {showGuaranteedOption && (
+            <div>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={isGuaranteed}
+                  onChange={(e) => setIsGuaranteed(e.target.checked)}
+                  className="mr-2"
+                />
+                <span className="text-sm text-gray-700">
+                  Was this a guaranteed 5-star? (e.g., from radiance, pity, or previous guarantee)
                 </span>
               </label>
             </div>

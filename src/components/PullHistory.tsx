@@ -32,6 +32,11 @@ export function PullHistory({ pullHistory }: PullHistoryProps) {
               }`}>
                 {pull.rarity}★
               </span>
+              {pull.isGuaranteed && (
+                <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">
+                  Guaranteed
+                </span>
+              )}
               {pull.isFeatured && (
                 <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
                   Featured
@@ -42,10 +47,20 @@ export function PullHistory({ pullHistory }: PullHistoryProps) {
                   Chosen
                 </span>
               )}
+              {pull.radianceUsed && (
+                <span className="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded">
+                  {pull.radianceUsed} Radiance
+                </span>
+              )}
             </div>
-            <span className="text-xs text-gray-400">
-              {new Date(pull.timestamp).toLocaleDateString()}
-            </span>
+            <div className="text-right">
+              <span className="text-xs text-gray-400 block">
+                {new Date(pull.timestamp).toLocaleDateString()}
+              </span>
+              <span className="text-xs text-gray-400">
+                {new Date(pull.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
           </div>
         ))}
       </div>
