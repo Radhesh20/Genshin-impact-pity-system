@@ -59,7 +59,7 @@ export function BannerView({ bannerType, bannerState, onUpdateBanner }: BannerVi
       </div>
 
       {/* Pity Counters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-6 border border-yellow-200">
           <h3 className="text-lg font-semibold text-yellow-800 mb-2">5-Star Pity</h3>
           <div className="text-3xl font-bold text-yellow-900">
@@ -83,6 +83,16 @@ export function BannerView({ bannerType, bannerState, onUpdateBanner }: BannerVi
               className="bg-purple-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${(bannerState.pity4 / 10) * 100}%` }}
             />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
+          <h3 className="text-lg font-semibold text-blue-800 mb-2">Total Radiance</h3>
+          <div className="text-3xl font-bold text-blue-900">
+            {bannerState.totalRadiance}
+          </div>
+          <div className="text-sm text-blue-700 mt-2">
+            Radiance used for pulls
           </div>
         </div>
       </div>

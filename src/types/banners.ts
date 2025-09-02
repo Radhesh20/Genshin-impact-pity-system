@@ -5,6 +5,8 @@ export interface PullResult {
   timestamp: number;
   isFeatured?: boolean;
   isChosenItem?: boolean;
+  isGuaranteed?: boolean;
+  radianceUsed?: number;
 }
 
 export interface BannerState {
@@ -15,6 +17,7 @@ export interface BannerState {
   chosenItem?: string;
   pullHistory: PullResult[];
   totalPulls: number;
+  totalRadiance: number;
 }
 
 export type BannerType = 'character' | 'weapon' | 'standard' | 'chronicled';
@@ -30,4 +33,6 @@ export interface PullInput {
   rarity: 3 | 4 | 5;
   isFeatured?: boolean;
   isChosenItem?: boolean;
+  isGuaranteed?: boolean;
+  radianceUsed?: number;
 }

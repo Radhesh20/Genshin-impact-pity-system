@@ -9,6 +9,11 @@ export function calculateNewPity(
   const newState = { ...bannerState };
   const newPulls: PullResult[] = [];
 
+  // Add radiance to total if specified
+  if (pullInput.radianceUsed) {
+    newState.totalRadiance += pullInput.radianceUsed;
+  }
+
   for (let i = 0; i < pullCount; i++) {
     newState.pity4++;
     newState.pity5++;
@@ -21,6 +26,8 @@ export function calculateNewPity(
       timestamp: Date.now(),
       isFeatured: pullInput.isFeatured,
       isChosenItem: pullInput.isChosenItem,
+      isGuaranteed: pullInput.isGuaranteed,
+      radianceUsed: i === 0 ? pullInput.radianceUsed : undefined, // Only apply radiance to first pull
     };
 
     // Handle 4-star
@@ -33,48 +40,58 @@ export function calculateNewPity(
       newState.pity4 = 0;
       newState.pity5 = 0;
 
-      // Banner-specific logic
-      switch (bannerType) {
-        case 'character':
-          if (newState.isGuaranteed5) {
-            // This is a guaranteed featured character
-            newState.isGuaranteed5 = false;
-          } else {
-            // 50/50 chance
-            if (!pullInput.isFeatured) {
-              newState.isGuaranteed5 = true;
+      // Only apply guarantee logic if this wasn't a guaranteed pull (like from radiance)
+      if (!pullInput.isGuaranteed) {
+        // Banner-specific logic
+        switch (bannerType) {
+          case 'character':
+            if (newState.isGuaranteed5) {
+              // This is a guaranteed featured character
+              newState.isGuaranteed5 = false;
+            } else {
+              // 50/50 chance
+              if (!pullInput.isFeatured) {
+                newState.isGuaranteed5 = true;
+              }
             }
-          }
-          break;
+            break;
 
-        case 'weapon':
-          if (pullInput.isChosenItem) {
-            // Got the chosen weapon, reset fate points
-            newState.fatePoints = 0;
-          } else if (!pullInput.isFeatured) {
-            // Got off-banner 5-star, increment fate points
-            newState.fatePoints = Math.min(newState.fatePoints + 1, 2);
-          } else {
-            // Got featured weapon but not chosen one, increment fate points
-            newState.fatePoints = Math.min(newState.fatePoints + 1, 2);
-          }
-          break;
-
-        case 'chronicled':
-          if (newState.isGuaranteed5) {
-            // This is a guaranteed chosen item
-            newState.isGuaranteed5 = false;
-          } else {
-            // 50/50 chance
-            if (!pullInput.isChosenItem) {
-              newState.isGuaranteed5 = true;
+          case 'weapon':
+            if (pullInput.isChosenItem) {
+              // Got the chosen weapon, reset fate points
+              newState.fatePoints = 0;
+            } else if (!pullInput.isFeatured) {
+              // Got off-banner 5-star, increment fate points
+              newState.fatePoints = Math.min(newState.fatePoints + 1, 2);
+            } else {
+              // Got featured weapon but not chosen one, increment fate points
+              newState.fatePoints = Math.min(newState.fatePoints + 1, 2);
             }
-          }
-          break;
+            break;
 
-        case 'standard':
-          // No special guarantee system
-          break;
+          case 'chronicled':
+            if (newState.isGuaranteed5) {
+              // This is a guaranteed chosen item
+              newState.isGuaranteed5 = false;
+            } else {
+              // 50/50 chance
+              if (!pullInput.isChosenItem) {
+                newState.isGuaranteed5 = true;
+              }
+            }
+            break;
+
+          case 'standard':
+            // No special guarantee system
+            break;
+        }
+      } else {
+        // If it was a guaranteed pull, reset appropriate guarantees
+        if (bannerType === 'character' || bannerType === 'chronicled') {
+          newState.isGuaranteed5 = false;
+        } else if (bannerType === 'weapon' && pullInput.isChosenItem) {
+          newState.fatePoints = 0;
+        }
       }
     }
 

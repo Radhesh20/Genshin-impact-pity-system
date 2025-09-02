@@ -12,6 +12,7 @@ const initialBannerData: BannerData = {
     fatePoints: 0,
     pullHistory: [],
     totalPulls: 0,
+    totalRadiance: 0,
   },
   weapon: {
     pity4: 0,
@@ -20,6 +21,7 @@ const initialBannerData: BannerData = {
     fatePoints: 0,
     pullHistory: [],
     totalPulls: 0,
+    totalRadiance: 0,
   },
   standard: {
     pity4: 0,
@@ -28,6 +30,7 @@ const initialBannerData: BannerData = {
     fatePoints: 0,
     pullHistory: [],
     totalPulls: 0,
+    totalRadiance: 0,
   },
   chronicled: {
     pity4: 0,
@@ -36,6 +39,7 @@ const initialBannerData: BannerData = {
     fatePoints: 0,
     pullHistory: [],
     totalPulls: 0,
+    totalRadiance: 0,
   },
 };
 
