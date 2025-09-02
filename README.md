@@ -1,0 +1,1 @@
+Genshin-impact-pity-system
